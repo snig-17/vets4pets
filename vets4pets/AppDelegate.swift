@@ -1,21 +1,52 @@
+// Start of AppDelegate.swift
 //
 //  AppDelegate.swift
 //  vets4pets
 //
-//  Created by Snigdha Tiwari  on 29/07/2025.
+//  Created by Snigdha Tiwari on 01/02/24.
 //
 
 import UIKit
+import FirebaseCore
+import UserNotifications
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    private func requestNotificationAuth(application: UIApplication){
+        let center = UNUserNotificationCenter.current()
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        center.requestAuthorization(options: options) { granted, error in
+            if let e = error {
+                print(e.localizedDescription)
+            }
+        }
+    }
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        return true
-    }
+        
+        requestNotificationAuth(application: application)
+        
+        do {
+             _ = try Realm()
+        } catch {
+            print("error initializing realm \(error)")
+        }
+       
+        print(Realm.Configuration.defaultConfiguration.fileURL)
+        
+        
+    
+            FirebaseApp.configure()
+            return true
+        }
+    
+  
+    
 
     // MARK: UISceneSession Lifecycle
 
@@ -34,3 +65,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+// End of AppDelegate.swift
